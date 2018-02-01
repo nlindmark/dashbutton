@@ -2,8 +2,9 @@
 #include "Dashbutton.h"
 #include <Arduino.h>
 #include <Ticker.h>
+#include "iotUpdater.h"
 
-#define CODE_VERSION "V1.0.0"
+#define CODE_VERSION "V1.0.3"
 
 char ssid[] = SSIDNAME;
 char password[] = PASSWORD;
@@ -59,8 +60,6 @@ void Dashbutton::update() {
     // Client connected
     mqttClient.loop();
   }
-
-
 }
 
 // PRIVATE
@@ -89,7 +88,8 @@ boolean Dashbutton::mqttReconnect() {
       strcat(str, CODE_VERSION);
       mqttClient.publish("/home/dashbutton/hello", str);
       mqttClient.publish("/home/dashbutton/pushed", "pushed");
-      mqttClient.subscribe("/home/dashbutton/status",1);
+      mqttClient.subscribe("/home/dashbutton/status", 1);
+      mqttClient.subscribe("/home/dashbutton/reprogram", 1);
     }
   }
   return mqttClient.connected();
@@ -118,6 +118,9 @@ void Dashbutton::mqttCallback(char *topic, byte *payload, unsigned int length) {
     if (strcmp(p, "Acknowledge") == 0) {
       gotoSleep();
     }
+  } else if (strcmp(t, "/home/dashbutton/reprogram") == 0) {
+    iotUpdater(true);
+    Serial.println("Received a reprogram command");
   }
 }
 

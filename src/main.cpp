@@ -1,5 +1,5 @@
 #include "Dashbutton.h"
-#include "iotUpdater.h"
+
 
 // FORWARD DECLARATIONS
 void eventListener();
@@ -15,18 +15,17 @@ void setup() {
   dashbutton = Dashbutton::getInstance();
   dashbutton->setCallback(eventListener);
 
-  iotUpdater(true);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-  dashbutton->update();
-  yield();
-}
+  void loop() {
+    // put your main code here, to run repeatedly:
+    dashbutton->update();
+    yield();
+  }
 
-// CALLBACKS
-//
+  // CALLBACKS
+  //
 
-void eventListener() {
-  // Something wonderful has happened
-}
+  void eventListener() {
+    // Something wonderful has happened
+  }
